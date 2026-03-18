@@ -7,7 +7,24 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ isset($title) ? $title . ' | ' . config('app.name', 'Laravel') : config('app.name', 'Laravel') }}</title>
+     
+    <title>LaraStore - Mohamed Elabyad Portfolio Project</title>
 
+    <meta name="description" content="LaraStore is a multi-vendor e-commerce marketplace built with Laravel, featuring vendor storefronts, Stripe payments, product variations, real-time cart system, and admin analytics dashboard.">
+    
+    <!-- Open Graph / Facebook, WhatsApp, LinkedIn -->
+    <meta property="og:title" content="LaraStore - Mohamed Elabyad Portfolio Project">
+    <meta property="og:description" content="LaraStore: A Laravel multi-vendor marketplace where sellers manage their own stores, customers shop across vendors, and payments are handled via Stripe with real-time cart and analytics.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://larastore.elabyad.online">
+    <meta property="og:image" content="https://larastore.elabyad.online/images/larastore.png">
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="LaraStore - Multi Vendor Marketplace">
+    <meta name="twitter:description" content="A Laravel-based multi-vendor e-commerce platform with Stripe payments, vendor dashboards, and advanced product management.">
+    <meta name="twitter:image" content="https://larastore.elabyad.online/images/larastore.png">
+    
+    <meta name="keywords" content="Laravel, E-commerce, Multi Vendor, Marketplace, Stripe, Filament, Livewire, Mohamed Elabyad Portfolio">
     {{-- SEO / OG meta tags – pushed from individual pages via @push('seo') --}}
     @stack('seo')
 
