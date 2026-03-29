@@ -4,13 +4,13 @@ namespace App\Filament\Widgets;
 
 use App\Enums\RolesEnum;
 use App\Models\OrderItem;
+use App\Models\Product;
 use Filament\Widgets\ChartWidget;
 use Illuminate\Support\Facades\Auth;
 
 class TopSellingProductsChart extends ChartWidget
 {
     protected ?string $heading = 'Top Selling Products';
-
     protected static ?int $sort = 5;
 
     protected function getData(): array
@@ -31,11 +31,17 @@ class TopSellingProductsChart extends ChartWidget
             ->limit(5)
             ->pluck('total', 'title');
 
+        $shortened = $data->mapWithKeys(
+            fn($value, $key) => [
+                (strlen($key) > 20 ? substr($key, 0, 20) . '...' : $key) => $value
+            ]
+        );
+
         return [
             'datasets' => [
                 [
                     'label' => 'Sales',
-                    'data' => $data->values(),
+                    'data'  => $shortened->values(),
                     'backgroundColor' => [
                         '#6366f1',
                         '#f59e0b',
@@ -45,7 +51,7 @@ class TopSellingProductsChart extends ChartWidget
                     ],
                 ],
             ],
-            'labels' => $data->keys(),
+            'labels' => $shortened->keys()
         ];
     }
 

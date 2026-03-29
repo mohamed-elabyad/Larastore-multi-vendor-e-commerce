@@ -100,13 +100,13 @@
 
                 initFromUrl() {
                     const params = new URLSearchParams(window.location.search);
-                    
+
                     // Get quantity from URL if present
                     const urlQuantity = params.get('quantity');
                     if (urlQuantity) {
                         this.quantity = parseInt(urlQuantity);
                     }
-                    
+
                     // Get variation options from URL
                     this.variationTypes.forEach(vType => {
                         const optionId = params.get('options[' + vType.id + ']');
@@ -243,7 +243,7 @@
                         <li><a href="#"
                                 class="text-blue-600 hover:text-blue-800">{{ $product->category->name }}</a></li>
                         <li class="text-gray-400">/</li>
-                        <li class="text-gray-600">{{ $product->title }}</li>
+                        <li class="text-gray-600">{{ Str::limit($product->title, 50) }}</li>
                     </ol>
                 </nav>
 
@@ -384,7 +384,7 @@
                             <p x-show="quantityError" x-text="quantityError" class="text-red-600 text-sm mt-2"></p>
                         </div>
                         {{-- Add to Cart Form --}}
-                        <div class="border-t pt-6" x-data="{ 
+                        <div class="border-t pt-6" x-data="{
                             localLoading: false,
                             async submitAddToCart() {
                                 this.localLoading = true;
@@ -418,12 +418,12 @@
                                 @csrf
                                 {{-- product_id is sent in URL, removing hidden input --}}
                                 <input type="hidden" name="quantity" :value="quantity">
- 
+
                                 {{-- Hidden inputs for selected options (renamed to option_ids) --}}
                                 <template x-for="(optionId, typeId) in selectedOptions" :key="typeId">
                                     <input type="hidden" :name="'option_ids[' + typeId + ']'" :value="optionId">
                                 </template>
- 
+
                                 <button type="submit" :disabled="!isValid || localLoading"
                                     class="w-full py-4 rounded-lg font-bold text-lg transition-all disabled:opacity-50"
                                     :class="isValid ? 'bg-blue-600 hover:bg-blue-700 text-white cursor-pointer' :

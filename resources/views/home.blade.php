@@ -55,4 +55,11 @@
         </div>
     </div>
 
+{{-- Pagination --}}
+    @if ($products->hasPages())
+        <div class="flex justify-center  mt-8">
+            {{ $products->links() }}
+        </div>
+    @endif
+
 </x-app-layout>

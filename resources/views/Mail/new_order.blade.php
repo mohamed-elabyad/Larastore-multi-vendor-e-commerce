@@ -3,8 +3,8 @@
 Congratulations! you have Order.
 </h1>
 
-<x-mail::button :url="url('/orders/' . $order->id)">
-View Order Details
+<x-mail::button :url="url('/')">
+View Website
 </x-mail::button>
 
 <h3 style="font-size: 20px; margin-bottom: 15px">
@@ -77,6 +77,6 @@ src="{{$orderItem->product->getImageForOptions($orderItem->variation_type_option
         Thank you for having business with us.
 </x-mail::panel>
 
-        Thanks, 
+        Thanks,
         {{ config('app.name') }}
 </x-mail::message>

@@ -69,7 +69,7 @@ class ProductsTable
             ->filters([
                 SelectFilter::make('status')
                     ->options(ProductStatusEnum::labels()),
-                SelectFilter::make('department_id')
+                SelectFilter::make('department')
                     ->relationship('department', 'name'),
                 Filter::make('created_at')
                     ->schema([

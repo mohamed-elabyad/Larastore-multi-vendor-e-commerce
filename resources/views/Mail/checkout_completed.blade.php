@@ -8,7 +8,7 @@
 <tr>
 <td>Seller</td>
 <td>
-<a href="{{ url('/') }}">
+<a href="{{route('vendor.profile', $order->vendor->store_name)}}">
 {{$order->vendor->store_name}}</a>
 </td>
 </tr>
@@ -60,8 +60,8 @@ src="{{$orderItem->product->getImageForOptions($orderItem->variation_type_option
 </table>
 </x-mail::table>
 
-<x-mail::button :url="url('/dashboard')">
-View My Orders
+<x-mail::button :url="url('/')">
+View Website
 </x-mail::button>
 @endforeach
 
@@ -69,6 +69,6 @@ View My Orders
         Thanks For Shopping with us.
 </x-mail::panel>
 
-        Thanks, 
+        Thanks,
         {{config('app.name')}}
 </x-mail::message>

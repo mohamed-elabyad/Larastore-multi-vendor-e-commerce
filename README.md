@@ -50,6 +50,13 @@ A multi-vendor e-commerce marketplace built with Laravel 12 where multiple selle
 - Update store name, address, and cover image in real-time.
 - Connect a Stripe account to start receiving payouts.
 - New users can apply to become a vendor through an in-app onboarding flow.
+- Approved vendors also access the Filament panel at `/admin` where all analytics widgets are automatically scoped to show only their own data:
+  - **Stats Overview** — My Orders this year, My Products this year, and My Revenue this year (vendor subtotal), each with month-over-month trend indicators.
+  - **Revenue Chart** — Monthly revenue chart showing the vendor's own `vendor_subtotal` earnings over the year.
+  - **Orders Chart** — Monthly order volume chart filtered to the vendor's own orders.
+  - **Order Status Chart** — Breakdown of the vendor's own orders by status (Paid, Shipped, Delivered, etc.).
+  - **Top Selling Products** — The vendor's own best-performing products ranked by sales.
+  - **Products Added Chart** — Catalog growth chart showing products added by that vendor over time.
 
 **Authentication & Authorization**
 - Built on Laravel Breeze with email verification support.
@@ -181,7 +188,7 @@ app/
 ├── Livewire/           # CartPopup, VendorDetails
 ├── Models/             # Product, Category, Department, Order, Cart, Vendor, User, etc.
 ├── Services/           # CartService, StripeConnectService
-└── Exceptions/         # Custom exceptions (PaymentFailed, OutOfStock, QuantityExceeded)
+└── Exceptions/         # Custom exceptions (PaymentFailed, OutOfStock, QuantityExceeded, VendorNotApproved)
 
 resources/views/
 ├── components/         # Reusable Blade components
@@ -192,6 +199,42 @@ resources/views/
 ├── Stripe/             # Checkout and payment status pages
 └── livewire/           # Livewire component views
 ```
+
+## Email Notifications
+
+Two queued emails are dispatched automatically after a successful payment:
+
+### Customer — Checkout Completed (`CheckoutCompletedMail`)
+Sent to the **buyer** after payment is confirmed. One email covers all vendors in a single checkout, and for each order it includes:
+- Seller name with a link to their storefront.
+- Order ID, number of items, and order total.
+- An itemised table with product thumbnail, product name, quantity, and unit price.
+- A "View Website" button and a thank-you note.
+
+### Vendor — New Order (`NewOrderMail`)
+Sent to the **vendor** every time one of their products is purchased. The email contains:
+- Order ID and order date.
+- Order total (full amount paid by customer).
+- Platform fee (website commission deducted).
+- Vendor's net earnings (`vendor_subtotal` after commission).
+- An itemised table with product thumbnail, product name, quantity, and unit price.
+- A "View Website" button.
+
+Both mail classes implement `ShouldQueue`, so they are processed asynchronously through the queue worker without blocking the HTTP request.
+
+## Exception Handling
+
+All domain-level errors are handled through a custom exception hierarchy rooted at `AppException`:
+
+```
+AppException
+├── CartQuantityExceededException   — thrown when the requested quantity exceeds available stock in the cart
+├── ProductOutOfStockException      — thrown when a product has no remaining stock
+├── PaymentFailedException          — thrown when a Stripe payment or webhook processing fails
+└── VendorNotApprovedException      — thrown when a user tries to perform a vendor action before being approved
+```
+
+`AppException` defines a `render()` method that redirects the user back to the previous page and flashes the exception message as an `error` session variable. All four subclasses extend it without adding extra logic, so they all behave the same way — any caught domain exception automatically surfaces as a user-friendly flash error without exposing stack traces.
 
 ### License
 

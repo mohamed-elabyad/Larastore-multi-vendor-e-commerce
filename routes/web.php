@@ -26,8 +26,10 @@ Route::controller(CartController::class)->group(function () {
     Route::get('/cart/items', 'items')
         ->name('cart.items');
     Route::post('/cart/add/{product}', 'store')
+        ->middleware('throttle:30,1')
         ->name('cart.store');
     Route::put('/cart/{product}', 'update')
+        ->middleware('throttle:30,1')
         ->name('cart.update');
     Route::delete('/cart/{product:id}', 'destroy')
         ->name('cart.destroy');
@@ -35,6 +37,7 @@ Route::controller(CartController::class)->group(function () {
 
 Route::middleware('verified')->group(function () {
     Route::post('/cart/checkout', [CartController::class, 'checkout'])
+        ->middleware('throttle:10,1')
         ->name('cart.checkout');
 
     Route::get('/stripe/success', [StripeController::class, 'success'])
@@ -48,14 +51,13 @@ Route::middleware('verified')->group(function () {
 
     Route::get('/stripe/connect', [StripeConnectController::class, 'connect'])
         ->name('stripe.connect')
-        ->middleware('role:'.RolesEnum::Vendor->value);
+        ->middleware('role:' . RolesEnum::Vendor->value);
 
     Route::get('/stripe/return', [StripeConnectController::class, 'handleReturn'])
         ->name('stripe.return');
 
     Route::get('/stripe/refresh', [StripeConnectController::class, 'refresh'])
         ->name('stripe.refresh');
-
 });
 
 Route::post('/stripe/webhook', [StripeController::class, 'webhook'])
@@ -68,4 +70,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
