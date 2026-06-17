@@ -130,75 +130,7 @@ Vendor payouts processed via Stripe Connect
 - MySQL 8.0+
 - Stripe account with API keys
 
-## Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/your-username/larastore.git
-   cd larastore
-   ```
-
-2. **Install dependencies**
-   ```bash
-   composer install
-   npm install
-   ```
-
-3. **Configure environment**
-   ```bash
-   cp .env.example .env
-   php artisan key:generate
-   ```
-   Update `.env` with your database credentials and Stripe keys:
-   ```env
-   DB_DATABASE=e_commerce
-   DB_USERNAME=root
-   DB_PASSWORD=
-
-   STRIPE_KEY=your_stripe_publishable_key
-   STRIPE_SECRET=your_stripe_secret_key
-   STRIPE_WEBHOOK_SECRET=your_webhook_secret
-   ```
-
-4. **Run migrations**
-   ```bash
-   php artisan migrate --seed
-   ```
-
-5. **Build frontend assets**
-   ```bash
-   npm run build
-   ```
-
-6. **Start the application**
-   ```bash
-   composer dev
-   ```
-   This runs the Laravel server, queue worker, and Vite dev server concurrently.
-
-## Project Structure
-
-```
-app/
-├── Enums/              # OrderStatus, ProductStatus, VendorStatus, Roles, VariationTypes
-├── Filament/
-│   ├── Resources/      # Admin CRUD (Products, Categories, Departments, Users, Vendors)
-│   └── Widgets/        # Dashboard analytics (Revenue, Orders, Stats, Top Products)
-├── Http/Controllers/   # Product, Cart, Stripe, StripeConnect, Vendor, Profile
-├── Livewire/           # CartPopup, VendorDetails
-├── Models/             # Product, Category, Department, Order, Cart, Vendor, User, etc.
-├── Services/           # CartService, StripeConnectService
-└── Exceptions/         # Custom exceptions (PaymentFailed, OutOfStock, QuantityExceeded, VendorNotApproved)
-
-resources/views/
-├── components/         # Reusable Blade components
-├── layouts/            # Application layouts
-├── products/           # Product listing and detail pages
-├── vendor/             # Vendor store profile pages
-├── Cart/               # Shopping cart views
-├── Stripe/             # Checkout and payment status pages
-└── livewire/           # Livewire component views
-```
+---
 
 ## Email Notifications
 
@@ -235,6 +167,33 @@ AppException
 ```
 
 `AppException` defines a `render()` method that redirects the user back to the previous page and flashes the exception message as an `error` session variable. All four subclasses extend it without adding extra logic, so they all behave the same way — any caught domain exception automatically surfaces as a user-friendly flash error without exposing stack traces.
+
+---
+
+## Project Structure
+
+```
+app/
+├── Enums/              # OrderStatus, ProductStatus, VendorStatus, Roles, VariationTypes
+├── Filament/
+│   ├── Resources/      # Admin CRUD (Products, Categories, Departments, Users, Vendors)
+│   └── Widgets/        # Dashboard analytics (Revenue, Orders, Stats, Top Products)
+├── Http/Controllers/   # Product, Cart, Stripe, StripeConnect, Vendor, Profile
+├── Livewire/           # CartPopup, VendorDetails
+├── Models/             # Product, Category, Department, Order, Cart, Vendor, User, etc.
+├── Services/           # CartService, StripeConnectService
+└── Exceptions/         # Custom exceptions (PaymentFailed, OutOfStock, QuantityExceeded, VendorNotApproved)
+
+resources/views/
+├── components/         # Reusable Blade components
+├── layouts/            # Application layouts
+├── products/           # Product listing and detail pages
+├── vendor/             # Vendor store profile pages
+├── Cart/               # Shopping cart views
+├── Stripe/             # Checkout and payment status pages
+└── livewire/           # Livewire component views
+```
+---
 
 ### License
 
